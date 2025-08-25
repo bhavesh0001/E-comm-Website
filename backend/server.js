@@ -33,21 +33,45 @@ app.use('/api/products', productRoutes);
 // Health route (quick sanity check)
 app.get('/', (_req, res) => res.send('Server is running...'));
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong!',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
+});
+
 // Connect to MongoDB
-const MONGO_URI = process.env.MONGO_URI;
-(async () => {
+const connectDB = async () => {
   try {
+    const MONGO_URI = process.env.MONGO_URI;
     if (!MONGO_URI) {
-      console.warn('MONGO_URI missing in .env');
-    } else {
-      await mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-      console.log('MongoDB Connected');
+      throw new Error('MONGO_URI missing in environment variables');
     }
-  } catch (err) {
-    console.error('MongoDB connection error:', err.message);
-    // Don't crash server, still allow / and /api/products/ping etc
+    
+    const conn = await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    return true;
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
   }
-})();
+};
+
+// Connect to database before starting server
+connectDB().then(() => {
+  // Start server
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+});
 
 // Error Handler (last middleware)
 app.use((err, _req, res, _next) => {
