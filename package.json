@@ -1,0 +1,31 @@
+{
+  "name": "e-commerce-project",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "proxy": "http://localhost:4000",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^4.18.2",
+    "framer-motion": "^12.23.12",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.3",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.8.2",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "autoprefixer": "^10.4.21",
+    "nodemon": "^3.1.10",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12"
+  }
+}
