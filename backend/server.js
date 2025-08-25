@@ -16,6 +16,11 @@ console.log('ENV MONGO_URI exists?', !!process.env.MONGO_URI);
 // Initialize app
 const app = express();
 
+// Health check endpoint for Render
+app.get('/', (req, res) => {
+  res.json({ status: 'Backend server is running!' });
+});
+
 // Global Middlewares
 app.use(cors({
   origin: '*', // Allow all origins for now
